@@ -1,25 +1,26 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { PhotoService } from './photos/photo/photo.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit { //interface que obriga voce a especificar o ngOnInit
 
-  photos: Object[] = [];
+  photos: any[] = [];
   
   //injecao de dependencias
-  constructor(http: HttpClient) {
-    //console.log(http);
+  constructor(private photoService : PhotoService) {}
 
-    http
-      .get<Object[]>('http://localhost:3000/flavio/photos')
+  ngOnInit(): void { //angular procura o ngOnInit
+    
+    this.photoService
+      .listFromUser('flavio')
       .subscribe(photos => {
-        console.log(photos)
+        console.log(photos[0].description)
         this.photos = photos
       });
   }
-
+  
 }
